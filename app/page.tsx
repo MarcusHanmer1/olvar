@@ -19,13 +19,22 @@ export default function Home() {
           >
             Olvar
           </span>
-          <Link
-            href="/login"
-            className="text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
-            style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
-          >
-            Get started
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/demo"
+              className="text-sm font-medium px-4 py-1.5 rounded-md"
+              style={{ border: "1px solid #e5e5e4", color: "#6b6b67" }}
+            >
+              Try demo
+            </Link>
+            <Link
+              href="/login"
+              className="text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
+              style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
+            >
+              Get started
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -87,9 +96,13 @@ export default function Home() {
                 />
               </svg>
             </Link>
-            <span className="text-sm" style={{ color: "#6b6b67" }}>
-              No credit card required
-            </span>
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
+              style={{ border: "1px solid #e5e5e4", color: "#6b6b67" }}
+            >
+              Try it now
+            </Link>
           </div>
         </section>
 
