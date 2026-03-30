@@ -44,6 +44,31 @@ export async function updateStudent(
   return {};
 }
 
+export async function bulkAddStudents(
+  classId: string,
+  rows: { name: string; target_grade: number | null }[]
+): Promise<{ error?: string; count?: number }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  if (rows.length === 0) return { error: "No students to add" };
+
+  const { error } = await supabase.from("students").insert(
+    rows.map((r) => ({
+      class_id: classId,
+      name: r.name.trim(),
+      target_grade: r.target_grade,
+    }))
+  );
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/class/${classId}`);
+  revalidatePath("/dashboard");
+  return { count: rows.length };
+}
+
 export async function deleteStudent(
   studentId: string,
   classId: string

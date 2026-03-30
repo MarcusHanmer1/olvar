@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -59,13 +60,13 @@ export default function LoginPage() {
       style={{ backgroundColor: "#fafaf9" }}
     >
       {/* Logo */}
-      <a
+      <Link
         href="/"
         className="text-base font-semibold tracking-tight mb-10"
         style={{ color: "#1c1c1a" }}
       >
         Olvar
-      </a>
+      </Link>
 
       {/* Card */}
       <div

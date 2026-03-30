@@ -2,6 +2,12 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import topicsData from "@/data/gcse-topics.json";
+import {
+  saveTemplate,
+  deleteTemplate,
+  type Template,
+  type TemplateQuestion,
+} from "./template-actions";
 
 type TopicEntry = { label: string; strand: string };
 const TOPICS: TopicEntry[] = topicsData;
@@ -16,6 +22,7 @@ export type SetupQuestion = {
 };
 
 interface Props {
+  templates: Template[];
   onStart: (title: string, date: string, questions: SetupQuestion[]) => void;
 }
 
@@ -92,7 +99,7 @@ function TopicCombobox({
   }
 
   return (
-    <div ref={wrapRef} style={{ position: "relative", flex: 1, minWidth: 0 }}>
+    <div ref={wrapRef} style={{ position: "relative", flex: 1, minWidth: 0, zIndex: open ? 50 : 0 }}>
       <input
         ref={inputRef}
         type="text"
@@ -184,7 +191,7 @@ function TopicCombobox({
 
 // ── Main setup component ──────────────────────────────────────────────────────
 
-export default function AssessSetup({ onStart }: Props) {
+export default function AssessSetup({ templates, onStart }: Props) {
   const today = new Date().toISOString().slice(0, 10);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(today);
@@ -192,6 +199,76 @@ export default function AssessSetup({ onStart }: Props) {
     { id: crypto.randomUUID(), max_marks: 5, topic: "" },
   ]);
   const [error, setError] = useState<string | null>(null);
+
+  // Template state
+  const [localTemplates, setLocalTemplates] = useState<Template[]>(templates);
+  const [templateMenuOpen, setTemplateMenuOpen] = useState(false);
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  const [templateSaving, setTemplateSaving] = useState(false);
+  const [templateMsg, setTemplateMsg] = useState<string | null>(null);
+  const templateMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close template menu on outside click
+  useEffect(() => {
+    function onDown(e: MouseEvent) {
+      if (
+        templateMenuRef.current &&
+        !templateMenuRef.current.contains(e.target as Node)
+      ) {
+        setTemplateMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
+
+  function loadTemplate(t: Template) {
+    setQuestions(
+      t.questions.map((q) => ({
+        id: crypto.randomUUID(),
+        max_marks: q.max_marks,
+        topic: q.topic,
+      }))
+    );
+    setTemplateMenuOpen(false);
+    setError(null);
+  }
+
+  async function handleSaveTemplate() {
+    if (!templateName.trim()) return;
+    setTemplateSaving(true);
+    setTemplateMsg(null);
+
+    const tplQuestions: TemplateQuestion[] = questions.map((q) => ({
+      max_marks: q.max_marks,
+      topic: q.topic,
+    }));
+
+    const result = await saveTemplate(templateName.trim(), tplQuestions);
+    setTemplateSaving(false);
+
+    if (result.error) {
+      setTemplateMsg(result.error);
+    } else {
+      // Add to local list so it appears immediately
+      setLocalTemplates((prev) => [
+        { id: crypto.randomUUID(), name: templateName.trim(), questions: tplQuestions },
+        ...prev,
+      ]);
+      setTemplateName("");
+      setSaveModalOpen(false);
+      setTemplateMsg("Template saved");
+      setTimeout(() => setTemplateMsg(null), 2000);
+    }
+  }
+
+  async function handleDeleteTemplate(id: string) {
+    const result = await deleteTemplate(id);
+    if (!result.error) {
+      setLocalTemplates((prev) => prev.filter((t) => t.id !== id));
+    }
+  }
 
   function addQ() {
     setQuestions((qs) => [
@@ -262,6 +339,167 @@ export default function AssessSetup({ onStart }: Props) {
 
   return (
     <div style={{ maxWidth: "680px" }}>
+      {/* Template bar */}
+      {(localTemplates.length > 0 || templateMsg) && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          {localTemplates.length > 0 ? (
+            <div
+              ref={templateMenuRef}
+              style={{ position: "relative" }}
+            >
+              <button
+                onClick={() => setTemplateMenuOpen((o) => !o)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  padding: "7px 14px",
+                  borderRadius: "8px",
+                  border: "1px solid #e5e5e4",
+                  color: "#6b6b67",
+                  backgroundColor: "#ffffff",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "#0d9488";
+                  (e.currentTarget as HTMLElement).style.color = "#0d9488";
+                }}
+                onMouseLeave={(e) => {
+                  if (!templateMenuOpen) {
+                    (e.currentTarget as HTMLElement).style.borderColor = "#e5e5e4";
+                    (e.currentTarget as HTMLElement).style.color = "#6b6b67";
+                  }
+                }}
+              >
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.3" />
+                  <path d="M4 4.5h5M4 6.5h5M4 8.5h3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+                </svg>
+                Load template
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ marginLeft: "2px" }}>
+                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              {templateMenuOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 4px)",
+                    left: 0,
+                    zIndex: 100,
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e5e5e4",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                    overflow: "hidden",
+                    minWidth: "240px",
+                    maxHeight: "280px",
+                    overflowY: "auto",
+                  }}
+                >
+                  {localTemplates.map((t) => (
+                    <div
+                      key={t.id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: "8px",
+                        borderBottom: "1px solid #f0f0ef",
+                      }}
+                    >
+                      <button
+                        onMouseDown={() => loadTemplate(t)}
+                        style={{
+                          flex: 1,
+                          padding: "9px 14px",
+                          textAlign: "left",
+                          border: "none",
+                          backgroundColor: "transparent",
+                          cursor: "pointer",
+                          fontSize: "13px",
+                          color: "#1c1c1a",
+                        }}
+                        onMouseEnter={(e) =>
+                          ((e.currentTarget as HTMLElement).style.backgroundColor =
+                            "#f0fdfa")
+                        }
+                        onMouseLeave={(e) =>
+                          ((e.currentTarget as HTMLElement).style.backgroundColor =
+                            "transparent")
+                        }
+                      >
+                        <span style={{ fontWeight: 500 }}>{t.name}</span>
+                        <span
+                          style={{
+                            display: "block",
+                            fontSize: "11px",
+                            color: "#6b6b67",
+                            marginTop: "1px",
+                          }}
+                        >
+                          {t.questions.length}{" "}
+                          {t.questions.length === 1 ? "question" : "questions"} ·{" "}
+                          {t.questions.reduce((s, q) => s + q.max_marks, 0)} marks
+                        </span>
+                      </button>
+                      <button
+                        onMouseDown={() => handleDeleteTemplate(t.id)}
+                        title="Delete template"
+                        style={{
+                          width: "28px",
+                          height: "28px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          border: "none",
+                          backgroundColor: "transparent",
+                          color: "#d1d1cf",
+                          cursor: "pointer",
+                          borderRadius: "4px",
+                          marginRight: "8px",
+                          flexShrink: 0,
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.color = "#dc2626";
+                          (e.currentTarget as HTMLElement).style.backgroundColor = "#fef2f2";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.color = "#d1d1cf";
+                          (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                        }}
+                      >
+                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                          <path d="M1 1l9 9M10 1L1 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div />
+          )}
+
+          {templateMsg && (
+            <span style={{ fontSize: "12px", color: "#16a34a", fontWeight: 500 }}>
+              {templateMsg}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Title + Date */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "16px", marginBottom: "28px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -316,7 +554,6 @@ export default function AssessSetup({ onStart }: Props) {
           style={{
             borderRadius: "10px",
             border: "1px solid #e5e5e4",
-            overflow: "hidden",
             backgroundColor: "#ffffff",
           }}
         >
@@ -330,6 +567,7 @@ export default function AssessSetup({ onStart }: Props) {
                 padding: "10px 14px",
                 borderBottom:
                   i < questions.length - 1 ? "1px solid #f0f0ef" : undefined,
+                position: "relative",
               }}
             >
               {/* Q number */}
@@ -447,43 +685,170 @@ export default function AssessSetup({ onStart }: Props) {
           ))}
         </div>
 
-        {/* Add question */}
-        <button
-          onClick={addQ}
-          style={{
-            marginTop: "10px",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            fontSize: "13px",
-            fontWeight: 500,
-            padding: "7px 14px",
-            borderRadius: "8px",
-            border: "1px solid #e5e5e4",
-            color: "#6b6b67",
-            backgroundColor: "#ffffff",
-            cursor: "pointer",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = "#0d9488";
-            (e.currentTarget as HTMLElement).style.color = "#0d9488";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.borderColor = "#e5e5e4";
-            (e.currentTarget as HTMLElement).style.color = "#6b6b67";
-          }}
-        >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path
-              d="M6 1v10M1 6h10"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-          Add question
-        </button>
+        {/* Add question + Save as template */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "10px" }}>
+          <button
+            onClick={addQ}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+              padding: "7px 14px",
+              borderRadius: "8px",
+              border: "1px solid #e5e5e4",
+              color: "#6b6b67",
+              backgroundColor: "#ffffff",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = "#0d9488";
+              (e.currentTarget as HTMLElement).style.color = "#0d9488";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = "#e5e5e4";
+              (e.currentTarget as HTMLElement).style.color = "#6b6b67";
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M6 1v10M1 6h10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+            Add question
+          </button>
+
+          <button
+            onClick={() => {
+              setTemplateName(title || "");
+              setSaveModalOpen(true);
+            }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+              padding: "7px 14px",
+              borderRadius: "8px",
+              border: "1px solid #e5e5e4",
+              color: "#6b6b67",
+              backgroundColor: "#ffffff",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = "#0d9488";
+              (e.currentTarget as HTMLElement).style.color = "#0d9488";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = "#e5e5e4";
+              (e.currentTarget as HTMLElement).style.color = "#6b6b67";
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M9 1H3a1 1 0 00-1 1v8a1 1 0 001 1h6a1 1 0 001-1V3.5L7.5 1z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+              <path d="M7 1v3h3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Save as template
+          </button>
+        </div>
       </div>
+
+      {/* Save template modal */}
+      {saveModalOpen && (
+        <div className="modal-backdrop" onClick={() => !templateSaving && setSaveModalOpen(false)}>
+          <div
+            style={{
+              backgroundColor: "#ffffff",
+              border: "1px solid #e5e5e4",
+              borderRadius: "12px",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+              width: "100%",
+              maxWidth: "400px",
+              padding: "20px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3
+              style={{
+                fontSize: "15px",
+                fontWeight: 600,
+                color: "#1c1c1a",
+                margin: "0 0 14px",
+              }}
+            >
+              Save as template
+            </h3>
+            <p style={{ fontSize: "12px", color: "#6b6b67", margin: "0 0 12px" }}>
+              Saves the current {questions.length}{" "}
+              {questions.length === 1 ? "question" : "questions"} and their topic mappings.
+            </p>
+            <input
+              type="text"
+              value={templateName}
+              onChange={(e) => setTemplateName(e.target.value)}
+              placeholder="Template name, e.g. Paper 1 Non-Calc"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSaveTemplate();
+                if (e.key === "Escape") setSaveModalOpen(false);
+              }}
+              style={{
+                width: "100%",
+                border: "1px solid #e5e5e4",
+                borderRadius: "8px",
+                padding: "8px 12px",
+                fontSize: "14px",
+                color: "#1c1c1a",
+                outline: "none",
+                backgroundColor: "#ffffff",
+                marginBottom: "16px",
+              }}
+              onFocus={(e) => (e.target.style.borderColor = "#0d9488")}
+              onBlur={(e) => (e.target.style.borderColor = "#e5e5e4")}
+            />
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+              <button
+                onClick={() => setSaveModalOpen(false)}
+                disabled={templateSaving}
+                style={{
+                  padding: "7px 16px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  border: "1px solid #e5e5e4",
+                  color: "#6b6b67",
+                  backgroundColor: "#ffffff",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveTemplate}
+                disabled={templateSaving || !templateName.trim()}
+                style={{
+                  padding: "7px 16px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  border: "none",
+                  backgroundColor: "#0d9488",
+                  color: "#ffffff",
+                  cursor: templateSaving || !templateName.trim() ? "not-allowed" : "pointer",
+                  opacity: templateSaving || !templateName.trim() ? 0.6 : 1,
+                }}
+              >
+                {templateSaving ? "Saving…" : "Save template"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div

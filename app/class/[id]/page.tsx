@@ -36,6 +36,21 @@ export default async function ClassPage({
 
   const rows = (students ?? []) as Student[];
 
+  // Fetch assessments with marks for average calculation
+  const { data: assessments } = await supabase
+    .from("assessments")
+    .select("id, title, date, total_marks, marks(scores)")
+    .eq("class_id", id)
+    .order("date", { ascending: false });
+
+  const assessmentRows = (assessments ?? []) as {
+    id: string;
+    title: string;
+    date: string;
+    total_marks: number;
+    marks: { scores: (number | null)[] }[];
+  }[];
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#fafaf9" }}>
       <Nav email={user.email ?? ""} />
@@ -94,6 +109,107 @@ export default async function ClassPage({
 
         {/* Student list */}
         <ClassDetail classId={id} students={rows} />
+
+        {/* Assessment history */}
+        {assessmentRows.length > 0 && (
+          <div className="mt-8">
+            <h2
+              className="text-sm font-semibold mb-3"
+              style={{ color: "#1c1c1a" }}
+            >
+              Assessments
+            </h2>
+            <div
+              className="rounded-xl overflow-hidden"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e5e5e4" }}
+            >
+              {assessmentRows.map((a, i) => {
+                // Compute class average percentage
+                let avgPct: number | null = null;
+                if (a.marks.length > 0 && a.total_marks > 0) {
+                  const studentTotals = a.marks.map((m) =>
+                    m.scores.reduce<number>((sum, s) => sum + (s ?? 0), 0)
+                  );
+                  const classTotal = studentTotals.reduce((s, v) => s + v, 0);
+                  avgPct = (classTotal / (a.marks.length * a.total_marks)) * 100;
+                }
+
+                const pctColor =
+                  avgPct === null
+                    ? "#6b6b67"
+                    : avgPct >= 70
+                      ? "#16a34a"
+                      : avgPct >= 40
+                        ? "#d97706"
+                        : "#dc2626";
+
+                return (
+                  <Link
+                    key={a.id}
+                    href={`/class/${id}/results/${a.id}`}
+                    className="class-card flex items-center justify-between px-5 py-4"
+                    style={{
+                      textDecoration: "none",
+                      borderBottom:
+                        i < assessmentRows.length - 1
+                          ? "1px solid #f0f0ef"
+                          : undefined,
+                      display: "flex",
+                    }}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className="text-sm font-medium truncate"
+                        style={{ color: "#1c1c1a" }}
+                      >
+                        {a.title}
+                      </span>
+                      <span
+                        className="text-xs flex-shrink-0"
+                        style={{ color: "#6b6b67" }}
+                      >
+                        {a.date}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      {avgPct !== null && (
+                        <span
+                          className="text-xs font-semibold px-2 py-0.5 rounded-md tabular-nums"
+                          style={{
+                            color: pctColor,
+                            backgroundColor:
+                              avgPct >= 70
+                                ? "#f0fdf4"
+                                : avgPct >= 40
+                                  ? "#fffbeb"
+                                  : "#fef2f2",
+                          }}
+                        >
+                          {avgPct.toFixed(0)}%
+                        </span>
+                      )}
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        className="flex-shrink-0"
+                      >
+                        <path
+                          d="M3 7h8M7 3l4 4-4 4"
+                          stroke="#6b6b67"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

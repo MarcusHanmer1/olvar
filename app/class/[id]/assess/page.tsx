@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import Nav from "@/components/Nav";
 import AssessmentFlow from "./AssessmentFlow";
+import { getTemplates } from "./template-actions";
 
 export default async function AssessPage({
   params,
@@ -97,7 +98,7 @@ export default async function AssessPage({
           </p>
         </div>
 
-        <AssessmentFlow classId={id} students={students} />
+        <AssessmentFlow classId={id} students={students} templates={await getTemplates()} />
       </main>
     </div>
   );

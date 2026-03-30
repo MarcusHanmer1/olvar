@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#fafaf9" }}>
@@ -17,13 +19,13 @@ export default function Home() {
           >
             Olvar
           </span>
-          <a
-            href="#get-started"
+          <Link
+            href="/login"
             className="text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
             style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
           >
             Get started
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -63,9 +65,8 @@ export default function Home() {
           </p>
 
           <div className="flex items-center justify-center gap-4">
-            <a
-              id="get-started"
-              href="#"
+            <Link
+              href="/login"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
               style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
             >
@@ -85,7 +86,7 @@ export default function Home() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
             <span className="text-sm" style={{ color: "#6b6b67" }}>
               No credit card required
             </span>
@@ -347,8 +348,8 @@ export default function Home() {
               Join maths teachers who&rsquo;ve stopped spending their Sunday afternoons
               reformatting spreadsheets.
             </p>
-            <a
-              href="#"
+            <Link
+              href="/login"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
               style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
             >
@@ -368,7 +369,7 @@ export default function Home() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
         </section>
       </main>

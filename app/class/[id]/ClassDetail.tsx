@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { addStudent, updateStudent, deleteStudent } from "./actions";
+import CsvImportModal from "./CsvImportModal";
 
 export type Student = {
   id: string;
@@ -158,32 +159,35 @@ export default function ClassDetail({ classId, students }: Props) {
           )}
         </div>
         {!showAdd && (
-          <button
-            onClick={() => {
-              setShowAdd(true);
-              setAddName("");
-              setAddGrade(5);
-              setError(null);
-            }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
-            style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = "#0f766e")
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLElement).style.backgroundColor = "#0d9488")
-            }
-          >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path
-                d="M6 1v10M1 6h10"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            Add student
-          </button>
+          <div className="flex items-center gap-2">
+            <CsvImportModal classId={classId} />
+            <button
+              onClick={() => {
+                setShowAdd(true);
+                setAddName("");
+                setAddGrade(5);
+                setError(null);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+              style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.backgroundColor = "#0f766e")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.backgroundColor = "#0d9488")
+              }
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path
+                  d="M6 1v10M1 6h10"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              Add student
+            </button>
+          </div>
         )}
       </div>
 
