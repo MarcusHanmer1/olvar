@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find C:/Users/marcu/Documents/Olvar/Olvar -name *.json ! -path */node_modules/* ! -path */.next/*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}

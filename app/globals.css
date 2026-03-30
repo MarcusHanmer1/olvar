@@ -28,3 +28,45 @@ body {
   color: #1c1c1a;
   font-family: var(--font-sans), system-ui, sans-serif;
 }
+
+/* Clickable class cards */
+.class-card {
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.class-card:hover {
+  border-color: #0d9488 !important;
+  box-shadow: 0 1px 6px rgba(13, 148, 136, 0.1);
+}
+
+/* Student table rows */
+.student-row:hover {
+  background-color: #fafaf9;
+}
+
+/* Hide number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Mark grid cell focus ring */
+.mark-cell-input:focus {
+  border-color: #0d9488 !important;
+  box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.15);
+}
+
+/* Overlay modal backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
