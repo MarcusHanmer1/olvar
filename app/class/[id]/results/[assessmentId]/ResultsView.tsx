@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -77,6 +77,13 @@ export default function ResultsView({
   const sortedQla = [...qla].sort(
     (a, b) => a.avg_percentage - b.avg_percentage
   );
+
+  // Bar animation: start at zero width, grow after mount
+  const [barsReady, setBarsReady] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setBarsReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   // Feedback accordion state
   const [openStudent, setOpenStudent] = useState<string | null>(null);
@@ -191,6 +198,7 @@ export default function ResultsView({
 
               {/* Bar */}
               <div
+                className="qla-bar-track"
                 style={{
                   flex: 1,
                   height: "22px",
@@ -201,13 +209,16 @@ export default function ResultsView({
                 }}
               >
                 <div
+                  className="qla-bar-fill"
                   style={{
                     height: "100%",
-                    width: `${(q.avg_percentage / barScale) * 100}%`,
+                    width: barsReady
+                      ? `${(q.avg_percentage / barScale) * 100}%`
+                      : "0%",
                     borderRadius: "4px",
                     backgroundColor: ragBg(q.avg_percentage),
                     border: `1px solid ${ragColor(q.avg_percentage)}30`,
-                    transition: "width 0.3s ease",
+                    transitionDelay: `${i * 40}ms`,
                   }}
                 />
               </div>
@@ -316,166 +327,171 @@ export default function ResultsView({
                   </svg>
                 </button>
 
-                {/* Expanded content */}
-                {isOpen && (
-                  <div style={{ padding: "0 18px 16px 18px" }}>
-                    {/* WWW */}
-                    <div style={{ marginBottom: "14px" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                          marginBottom: "6px",
-                        }}
-                      >
-                        <span
+                {/* Expanded content — animated with CSS grid-row */}
+                <div
+                  className="accordion-panel"
+                  data-open={isOpen}
+                >
+                  <div className="accordion-inner">
+                    <div style={{ padding: "0 18px 16px 18px" }}>
+                      {/* WWW */}
+                      <div style={{ marginBottom: "14px" }}>
+                        <div
                           style={{
-                            width: "8px",
-                            height: "8px",
-                            borderRadius: "50%",
-                            backgroundColor: "#16a34a",
-                            flexShrink: 0,
-                          }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "11px",
-                            fontWeight: 700,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.04em",
-                            color: "#16a34a",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            marginBottom: "6px",
                           }}
                         >
-                          What went well
-                        </span>
-                      </div>
-                      <p
-                        style={{
-                          fontSize: "13px",
-                          lineHeight: 1.65,
-                          color: "#1c1c1a",
-                          margin: 0,
-                          paddingLeft: "14px",
-                        }}
-                      >
-                        {f.www}
-                      </p>
-                    </div>
-
-                    {/* EBI */}
-                    <div style={{ marginBottom: "14px" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                          marginBottom: "6px",
-                        }}
-                      >
-                        <span
+                          <span
+                            style={{
+                              width: "8px",
+                              height: "8px",
+                              borderRadius: "50%",
+                              backgroundColor: "#16a34a",
+                              flexShrink: 0,
+                            }}
+                          />
+                          <span
+                            style={{
+                              fontSize: "11px",
+                              fontWeight: 700,
+                              textTransform: "uppercase",
+                              letterSpacing: "0.04em",
+                              color: "#16a34a",
+                            }}
+                          >
+                            What went well
+                          </span>
+                        </div>
+                        <p
                           style={{
-                            width: "8px",
-                            height: "8px",
-                            borderRadius: "50%",
-                            backgroundColor: "#d97706",
-                            flexShrink: 0,
-                          }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "11px",
-                            fontWeight: 700,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.04em",
-                            color: "#d97706",
+                            fontSize: "13px",
+                            lineHeight: 1.65,
+                            color: "#1c1c1a",
+                            margin: 0,
+                            paddingLeft: "14px",
                           }}
                         >
-                          Even better if
-                        </span>
+                          {f.www}
+                        </p>
                       </div>
-                      <p
-                        style={{
-                          fontSize: "13px",
-                          lineHeight: 1.65,
-                          color: "#1c1c1a",
-                          margin: 0,
-                          paddingLeft: "14px",
-                        }}
-                      >
-                        {f.ebi}
-                      </p>
-                    </div>
 
-                    {/* Copy button */}
-                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                      <button
-                        onClick={() => copyFeedback(f)}
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          fontSize: "12px",
-                          fontWeight: 500,
-                          color:
-                            copiedName === f.student_name
-                              ? "#16a34a"
-                              : "#6b6b67",
-                          backgroundColor: "transparent",
-                          border: "1px solid #e5e5e4",
-                          borderRadius: "6px",
-                          padding: "5px 10px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {copiedName === f.student_name ? (
-                          <>
-                            <svg
-                              width="12"
-                              height="12"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                            >
-                              <path
-                                d="M2 6l3 3 5-5"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                            Copied
-                          </>
-                        ) : (
-                          <>
-                            <svg
-                              width="12"
-                              height="12"
-                              viewBox="0 0 12 12"
-                              fill="none"
-                            >
-                              <rect
-                                x="3.5"
-                                y="3.5"
-                                width="7"
-                                height="7"
-                                rx="1.5"
-                                stroke="currentColor"
-                                strokeWidth="1.2"
-                              />
-                              <path
-                                d="M8.5 3.5V2a1.5 1.5 0 00-1.5-1.5H2A1.5 1.5 0 00.5 2v5A1.5 1.5 0 002 8.5h1.5"
-                                stroke="currentColor"
-                                strokeWidth="1.2"
-                              />
-                            </svg>
-                            Copy feedback
-                          </>
-                        )}
-                      </button>
+                      {/* EBI */}
+                      <div style={{ marginBottom: "14px" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            marginBottom: "6px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: "8px",
+                              height: "8px",
+                              borderRadius: "50%",
+                              backgroundColor: "#d97706",
+                              flexShrink: 0,
+                            }}
+                          />
+                          <span
+                            style={{
+                              fontSize: "11px",
+                              fontWeight: 700,
+                              textTransform: "uppercase",
+                              letterSpacing: "0.04em",
+                              color: "#d97706",
+                            }}
+                          >
+                            Even better if
+                          </span>
+                        </div>
+                        <p
+                          style={{
+                            fontSize: "13px",
+                            lineHeight: 1.65,
+                            color: "#1c1c1a",
+                            margin: 0,
+                            paddingLeft: "14px",
+                          }}
+                        >
+                          {f.ebi}
+                        </p>
+                      </div>
+
+                      {/* Copy button */}
+                      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <button
+                          onClick={() => copyFeedback(f)}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            fontSize: "12px",
+                            fontWeight: 500,
+                            color:
+                              copiedName === f.student_name
+                                ? "#16a34a"
+                                : "#6b6b67",
+                            backgroundColor: "transparent",
+                            border: "1px solid #e5e5e4",
+                            borderRadius: "6px",
+                            padding: "5px 10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {copiedName === f.student_name ? (
+                            <>
+                              <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 12 12"
+                                fill="none"
+                              >
+                                <path
+                                  d="M2 6l3 3 5-5"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                              Copied
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 12 12"
+                                fill="none"
+                              >
+                                <rect
+                                  x="3.5"
+                                  y="3.5"
+                                  width="7"
+                                  height="7"
+                                  rx="1.5"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                />
+                                <path
+                                  d="M8.5 3.5V2a1.5 1.5 0 00-1.5-1.5H2A1.5 1.5 0 00.5 2v5A1.5 1.5 0 002 8.5h1.5"
+                                  stroke="currentColor"
+                                  strokeWidth="1.2"
+                                />
+                              </svg>
+                              Copy feedback
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
@@ -531,12 +547,13 @@ export default function ResultsView({
                   return (
                     <tr
                       key={entry.student_name}
-                      className="student-row"
+                      className="student-row intervention-row"
                       style={{
                         borderBottom:
                           i < interventions.length - 1
                             ? "1px solid #f0f0ef"
                             : undefined,
+                        animationDelay: `${i * 50}ms`,
                       }}
                     >
                       <td

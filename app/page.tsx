@@ -22,14 +22,14 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <Link
               href="/demo"
-              className="text-sm font-medium px-4 py-1.5 rounded-md"
+              className="btn-secondary text-sm font-medium px-4 py-1.5 rounded-md"
               style={{ border: "1px solid #e5e5e4", color: "#6b6b67" }}
             >
               Try demo
             </Link>
             <Link
               href="/login"
-              className="text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
+              className="btn-primary text-sm font-medium px-4 py-1.5 rounded-md"
               style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
             >
               Get started
@@ -42,7 +42,7 @@ export default function Home() {
         {/* Hero */}
         <section className="max-w-5xl mx-auto px-6 pt-24 pb-20 text-center">
           <div
-            className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full mb-8"
+            className="animate-fade-in-up delay-0 inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full mb-8"
             style={{
               backgroundColor: "#f0fdfa",
               color: "#0d9488",
@@ -57,7 +57,7 @@ export default function Home() {
           </div>
 
           <h1
-            className="text-5xl font-semibold tracking-tight leading-tight mb-6 max-w-2xl mx-auto"
+            className="animate-fade-in-up delay-1 text-5xl font-semibold tracking-tight leading-tight mb-6 max-w-2xl mx-auto"
             style={{ color: "#1c1c1a" }}
           >
             Post-marking admin,{" "}
@@ -65,7 +65,7 @@ export default function Home() {
           </h1>
 
           <p
-            className="text-lg leading-relaxed max-w-xl mx-auto mb-10"
+            className="animate-fade-in-up delay-2 text-lg leading-relaxed max-w-xl mx-auto mb-10"
             style={{ color: "#6b6b67" }}
           >
             Enter your class marks once. Olvar generates question-level
@@ -73,10 +73,10 @@ export default function Home() {
             export files — instantly.
           </p>
 
-          <div className="flex items-center justify-center gap-4">
+          <div className="animate-fade-in-up delay-3 flex items-center justify-center gap-4">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
+              className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
               style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
             >
               Get started free
@@ -98,7 +98,7 @@ export default function Home() {
             </Link>
             <Link
               href="/demo"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
+              className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
               style={{ border: "1px solid #e5e5e4", color: "#6b6b67" }}
             >
               Try it now
@@ -363,7 +363,7 @@ export default function Home() {
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
+              className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
               style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
             >
               Get started free
