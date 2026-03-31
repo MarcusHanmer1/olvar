@@ -1,66 +1,587 @@
 [
-  { "label": "Place value & ordering", "strand": "Number" },
-  { "label": "Rounding & estimation", "strand": "Number" },
-  { "label": "Fractions", "strand": "Number" },
-  { "label": "Decimals", "strand": "Number" },
-  { "label": "Percentages", "strand": "Number" },
-  { "label": "Percentage change", "strand": "Number" },
-  { "label": "Ratio", "strand": "Number" },
-  { "label": "Proportion", "strand": "Number" },
-  { "label": "Powers & roots", "strand": "Number" },
-  { "label": "Standard form", "strand": "Number" },
-  { "label": "Factors, multiples & primes", "strand": "Number" },
-  { "label": "Error intervals", "strand": "Number" },
-  { "label": "Surds", "strand": "Number" },
-  { "label": "Indices", "strand": "Number" },
-  { "label": "Simplifying expressions", "strand": "Algebra" },
-  { "label": "Expanding brackets", "strand": "Algebra" },
-  { "label": "Factorising", "strand": "Algebra" },
-  { "label": "Solving linear equations", "strand": "Algebra" },
-  { "label": "Solving quadratic equations", "strand": "Algebra" },
-  { "label": "Inequalities", "strand": "Algebra" },
-  { "label": "Sequences & nth term", "strand": "Algebra" },
-  { "label": "Straight-line graphs", "strand": "Algebra" },
-  { "label": "Quadratic graphs", "strand": "Algebra" },
-  { "label": "Other graphs & functions", "strand": "Algebra" },
-  { "label": "Simultaneous equations", "strand": "Algebra" },
-  { "label": "Algebraic fractions", "strand": "Algebra" },
-  { "label": "Iteration", "strand": "Algebra" },
-  { "label": "Proof", "strand": "Algebra" },
-  { "label": "Completing the square", "strand": "Algebra" },
-  { "label": "Direct & inverse proportion", "strand": "Ratio & Proportion" },
-  { "label": "Speed, distance & time", "strand": "Ratio & Proportion" },
-  { "label": "Density & pressure", "strand": "Ratio & Proportion" },
-  { "label": "Scale & scale factors", "strand": "Ratio & Proportion" },
-  { "label": "Compound interest & depreciation", "strand": "Ratio & Proportion" },
-  { "label": "Exchange rates", "strand": "Ratio & Proportion" },
-  { "label": "Angles in polygons", "strand": "Geometry" },
-  { "label": "Angles in parallel lines", "strand": "Geometry" },
-  { "label": "Circle theorems", "strand": "Geometry" },
-  { "label": "Circles – area & circumference", "strand": "Geometry" },
-  { "label": "Arc length & sector area", "strand": "Geometry" },
-  { "label": "Perimeter & area", "strand": "Geometry" },
-  { "label": "Volume & surface area", "strand": "Geometry" },
-  { "label": "Pythagoras' theorem", "strand": "Geometry" },
-  { "label": "Trigonometry (SOHCAHTOA)", "strand": "Geometry" },
-  { "label": "Sine & cosine rule", "strand": "Geometry" },
-  { "label": "Transformations", "strand": "Geometry" },
-  { "label": "Vectors", "strand": "Geometry" },
-  { "label": "Congruence & similarity", "strand": "Geometry" },
-  { "label": "Loci & construction", "strand": "Geometry" },
-  { "label": "3D geometry", "strand": "Geometry" },
-  { "label": "Bearings", "strand": "Geometry" },
-  { "label": "Units & conversions", "strand": "Geometry" },
-  { "label": "Basic probability", "strand": "Probability" },
-  { "label": "Relative frequency", "strand": "Probability" },
-  { "label": "Venn diagrams", "strand": "Probability" },
-  { "label": "Tree diagrams", "strand": "Probability" },
-  { "label": "Combined events", "strand": "Probability" },
-  { "label": "Mean, median, mode & range", "strand": "Statistics" },
-  { "label": "Frequency tables", "strand": "Statistics" },
-  { "label": "Grouped data & estimated mean", "strand": "Statistics" },
-  { "label": "Cumulative frequency & box plots", "strand": "Statistics" },
-  { "label": "Histograms", "strand": "Statistics" },
-  { "label": "Scatter graphs & correlation", "strand": "Statistics" },
-  { "label": "Sampling & data collection", "strand": "Statistics" }
+  {
+    "id": "N1",
+    "label": "Place value & ordering",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["ordering integers & decimals", "ordering negatives", "number lines", "inequality notation"]
+  },
+  {
+    "id": "N2",
+    "label": "Negative numbers",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["ordering negatives", "four operations with negatives", "negatives in context"]
+  },
+  {
+    "id": "N3",
+    "label": "Order of operations (BIDMAS)",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": []
+  },
+  {
+    "id": "N4",
+    "label": "Rounding & estimation",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["rounding to decimal places", "rounding to significant figures", "truncation", "estimation by rounding"]
+  },
+  {
+    "id": "N5",
+    "label": "Fractions",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["four operations with fractions", "ordering fractions", "mixed numbers & improper fractions", "fraction of an amount"]
+  },
+  {
+    "id": "N6",
+    "label": "Decimals",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["four operations with decimals", "ordering decimals", "converting between fractions & decimals"]
+  },
+  {
+    "id": "N7",
+    "label": "Recurring decimals",
+    "strand": "Number",
+    "tier": "higher",
+    "subtopics": ["converting recurring decimals to fractions", "identifying recurring patterns"]
+  },
+  {
+    "id": "N8",
+    "label": "Percentages",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["percentage of an amount", "one number as a percentage of another", "converting between fractions, decimals & percentages"]
+  },
+  {
+    "id": "N9",
+    "label": "Powers & roots",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["squares & cubes", "square roots & cube roots", "estimating roots"]
+  },
+  {
+    "id": "N10",
+    "label": "Indices (laws of)",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["multiplying & dividing powers", "power of a power", "negative indices (H)", "fractional indices (H)", "zero index"]
+  },
+  {
+    "id": "N11",
+    "label": "Standard form",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["converting to & from standard form", "calculating in standard form", "ordering in standard form"]
+  },
+  {
+    "id": "N12",
+    "label": "Factors, multiples & primes",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["identifying factors & multiples", "prime numbers", "prime factorisation", "HCF & LCM", "product of primes"]
+  },
+  {
+    "id": "N13",
+    "label": "Error intervals & bounds",
+    "strand": "Number",
+    "tier": "both",
+    "subtopics": ["error intervals from rounding", "upper & lower bounds", "bounds in calculations (H)"]
+  },
+  {
+    "id": "N14",
+    "label": "Surds",
+    "strand": "Number",
+    "tier": "higher",
+    "subtopics": ["simplifying surds", "adding & subtracting surds", "multiplying surds", "rationalising denominators"]
+  },
+  {
+    "id": "N15",
+    "label": "Product rule for counting",
+    "strand": "Number",
+    "tier": "higher",
+    "subtopics": ["systematic listing", "calculating total outcomes"]
+  },
+
+  {
+    "id": "A1",
+    "label": "Simplifying expressions",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["collecting like terms", "simplifying products", "simplifying with powers"]
+  },
+  {
+    "id": "A2",
+    "label": "Substitution",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["into expressions", "into formulae", "with negatives & fractions"]
+  },
+  {
+    "id": "A3",
+    "label": "Expanding brackets",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["single brackets", "double brackets", "triple brackets (H)"]
+  },
+  {
+    "id": "A4",
+    "label": "Factorising",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["single common factor", "quadratics (two brackets)", "difference of two squares (H)"]
+  },
+  {
+    "id": "A5",
+    "label": "Rearranging formulae",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["one-step rearrangement", "two-step rearrangement", "subject appears twice (H)"]
+  },
+  {
+    "id": "A6",
+    "label": "Solving linear equations",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["one-step equations", "two-step equations", "unknowns on both sides", "equations with brackets"]
+  },
+  {
+    "id": "A7",
+    "label": "Solving quadratic equations",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["factorising", "using the quadratic formula (H)", "completing the square (H)"]
+  },
+  {
+    "id": "A8",
+    "label": "Simultaneous equations",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["elimination method", "substitution method", "graphical method", "one linear & one quadratic (H)"]
+  },
+  {
+    "id": "A9",
+    "label": "Inequalities",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["solving linear inequalities", "representing on number lines", "graphical inequalities (H)", "quadratic inequalities (H)"]
+  },
+  {
+    "id": "A10",
+    "label": "Sequences",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["term-to-term rules", "nth term of linear sequences", "nth term of quadratic sequences (H)", "geometric sequences", "Fibonacci-type sequences", "special sequences"]
+  },
+  {
+    "id": "A11",
+    "label": "Straight-line graphs",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["plotting coordinates", "y = mx + c", "gradient & y-intercept", "finding equation of a line", "midpoint of a line segment", "parallel lines", "perpendicular lines (H)"]
+  },
+  {
+    "id": "A12",
+    "label": "Quadratic graphs",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["plotting from a table", "identifying roots & turning points", "sketching from factorised form"]
+  },
+  {
+    "id": "A13",
+    "label": "Real-life graphs",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["distance-time graphs", "conversion graphs", "velocity-time graphs (H)", "area under a curve (H)"]
+  },
+  {
+    "id": "A14",
+    "label": "Other graphs & functions",
+    "strand": "Algebra",
+    "tier": "higher",
+    "subtopics": ["cubic graphs", "reciprocal graphs", "exponential graphs", "trigonometric graphs", "recognising graph shapes"]
+  },
+  {
+    "id": "A15",
+    "label": "Graph transformations",
+    "strand": "Algebra",
+    "tier": "higher",
+    "subtopics": ["translations f(x) + a and f(x + a)", "reflections −f(x) and f(−x)", "stretches (H)"]
+  },
+  {
+    "id": "A16",
+    "label": "Equation of a circle",
+    "strand": "Algebra",
+    "tier": "higher",
+    "subtopics": ["x² + y² = r²", "tangent to a circle at a point"]
+  },
+  {
+    "id": "A17",
+    "label": "Function notation",
+    "strand": "Algebra",
+    "tier": "both",
+    "subtopics": ["input/output & function machines", "f(x) notation", "composite functions (H)", "inverse functions (H)"]
+  },
+  {
+    "id": "A18",
+    "label": "Algebraic fractions",
+    "strand": "Algebra",
+    "tier": "higher",
+    "subtopics": ["simplifying", "adding & subtracting", "multiplying & dividing", "solving equations with algebraic fractions"]
+  },
+  {
+    "id": "A19",
+    "label": "Iteration",
+    "strand": "Algebra",
+    "tier": "higher",
+    "subtopics": ["trial & improvement", "iterative formulae"]
+  },
+  {
+    "id": "A20",
+    "label": "Algebraic proof",
+    "strand": "Algebra",
+    "tier": "higher",
+    "subtopics": ["showing algebraic identities", "proving statements about integers", "counter-examples"]
+  },
+
+  {
+    "id": "R1",
+    "label": "Ratio",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["simplifying ratios", "sharing in a ratio", "combining ratios", "writing in 1:n form"]
+  },
+  {
+    "id": "R2",
+    "label": "Proportion",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["scaling recipes", "best buys & value for money", "unitary method"]
+  },
+  {
+    "id": "R3",
+    "label": "Direct & inverse proportion",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["recognising direct proportion", "recognising inverse proportion", "algebraic expressions for proportion (H)", "graphical representations (H)"]
+  },
+  {
+    "id": "R4",
+    "label": "Percentage change",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["percentage increase & decrease", "reverse percentages", "repeated percentage change", "percentage profit & loss"]
+  },
+  {
+    "id": "R5",
+    "label": "Compound interest & depreciation",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["compound interest", "depreciation", "growth & decay (H)"]
+  },
+  {
+    "id": "R6",
+    "label": "Speed, distance & time",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["calculating speed, distance or time", "converting units of speed", "average speed"]
+  },
+  {
+    "id": "R7",
+    "label": "Density & pressure",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["density = mass ÷ volume", "pressure = force ÷ area", "other compound measures"]
+  },
+  {
+    "id": "R8",
+    "label": "Scale drawings & maps",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["reading & using scales", "constructing scale drawings", "map distances & real distances"]
+  },
+  {
+    "id": "R9",
+    "label": "Unit conversions",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["metric conversions", "metric to imperial", "area & volume unit conversions"]
+  },
+  {
+    "id": "R10",
+    "label": "Exchange rates",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "both",
+    "subtopics": ["converting between currencies", "comparing exchange rates"]
+  },
+  {
+    "id": "R11",
+    "label": "Rates of change",
+    "strand": "Ratio, Proportion & Rates of Change",
+    "tier": "higher",
+    "subtopics": ["gradient as rate of change", "estimating gradient of a curve", "interpreting area under a graph"]
+  },
+
+  {
+    "id": "G1",
+    "label": "Properties of 2D shapes",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["classifying triangles", "properties of quadrilaterals", "properties of regular polygons"]
+  },
+  {
+    "id": "G2",
+    "label": "Symmetry",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["lines of symmetry", "rotational symmetry", "symmetry in regular polygons"]
+  },
+  {
+    "id": "G3",
+    "label": "Angles — basic facts",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["angles on a straight line", "angles at a point", "vertically opposite angles", "angles in a triangle", "angles in a quadrilateral"]
+  },
+  {
+    "id": "G4",
+    "label": "Angles in parallel lines",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["alternate angles", "corresponding angles", "co-interior angles"]
+  },
+  {
+    "id": "G5",
+    "label": "Angles in polygons",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["interior angle sum", "exterior angles", "regular polygon angles"]
+  },
+  {
+    "id": "G6",
+    "label": "Perimeter & area",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["rectangles & triangles", "parallelograms & trapeziums", "compound shapes"]
+  },
+  {
+    "id": "G7",
+    "label": "Circles — area & circumference",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["circumference", "area", "semicircles & quarter circles"]
+  },
+  {
+    "id": "G8",
+    "label": "Arc length & sector area",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["arc length", "sector area", "segment area (H)"]
+  },
+  {
+    "id": "G9",
+    "label": "Volume & surface area",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["prisms", "cylinders", "cones (H)", "spheres (H)", "pyramids (H)", "frustums (H)"]
+  },
+  {
+    "id": "G10",
+    "label": "Pythagoras' theorem",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["finding the hypotenuse", "finding a shorter side", "applied problems", "3D Pythagoras (H)"]
+  },
+  {
+    "id": "G11",
+    "label": "Trigonometry (SOHCAHTOA)",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["finding a side", "finding an angle", "exact trig values", "multi-step problems"]
+  },
+  {
+    "id": "G12",
+    "label": "Sine & cosine rule",
+    "strand": "Geometry & Measures",
+    "tier": "higher",
+    "subtopics": ["sine rule", "cosine rule", "area = ½ab sin C"]
+  },
+  {
+    "id": "G13",
+    "label": "Circle theorems",
+    "strand": "Geometry & Measures",
+    "tier": "higher",
+    "subtopics": ["angle at centre vs circumference", "angle in a semicircle", "cyclic quadrilateral", "tangent properties", "alternate segment theorem"]
+  },
+  {
+    "id": "G14",
+    "label": "Transformations",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["reflection", "rotation", "translation (column vectors)", "enlargement", "negative scale factor (H)", "describing combined transformations"]
+  },
+  {
+    "id": "G15",
+    "label": "Vectors",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["column vector notation", "addition & subtraction", "scalar multiplication", "vector proofs (H)"]
+  },
+  {
+    "id": "G16",
+    "label": "Congruence & similarity",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["congruence conditions (SSS, SAS, ASA, RHS)", "similar shapes", "finding missing lengths", "area & volume scale factors (H)"]
+  },
+  {
+    "id": "G17",
+    "label": "Loci & construction",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["perpendicular bisector", "angle bisector", "constructing triangles", "loci problems"]
+  },
+  {
+    "id": "G18",
+    "label": "Plans & elevations",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["drawing plans & elevations", "interpreting 2D representations", "matching to 3D shapes"]
+  },
+  {
+    "id": "G19",
+    "label": "Bearings",
+    "strand": "Geometry & Measures",
+    "tier": "both",
+    "subtopics": ["measuring bearings", "calculating bearings", "back bearings"]
+  },
+
+  {
+    "id": "S1",
+    "label": "Data collection & sampling",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["data types (discrete, continuous, qualitative)", "questionnaires & bias", "random sampling", "stratified sampling (H)", "capture-recapture (H)"]
+  },
+  {
+    "id": "S2",
+    "label": "Representing data — charts & graphs",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["bar charts & pictograms", "pie charts", "line graphs", "frequency polygons", "stem-and-leaf diagrams"]
+  },
+  {
+    "id": "S3",
+    "label": "Frequency tables & two-way tables",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["reading & constructing frequency tables", "two-way tables", "interpreting data from tables"]
+  },
+  {
+    "id": "S4",
+    "label": "Scatter graphs & correlation",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["plotting scatter graphs", "describing correlation", "line of best fit", "interpolation & extrapolation", "correlation vs causation (H)"]
+  },
+  {
+    "id": "S5",
+    "label": "Mean, median, mode & range",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["calculating from a list", "calculating from a frequency table", "choosing the appropriate average", "outliers (H)"]
+  },
+  {
+    "id": "S6",
+    "label": "Grouped data & estimated mean",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["modal class", "estimated mean from grouped data", "median class interval"]
+  },
+  {
+    "id": "S7",
+    "label": "Cumulative frequency",
+    "strand": "Statistics & Probability",
+    "tier": "higher",
+    "subtopics": ["cumulative frequency tables", "cumulative frequency graphs", "reading median & quartiles"]
+  },
+  {
+    "id": "S8",
+    "label": "Box plots",
+    "strand": "Statistics & Probability",
+    "tier": "higher",
+    "subtopics": ["drawing box plots", "interpreting box plots", "interquartile range", "comparing distributions"]
+  },
+  {
+    "id": "S9",
+    "label": "Histograms",
+    "strand": "Statistics & Probability",
+    "tier": "higher",
+    "subtopics": ["frequency density", "drawing histograms", "interpreting histograms", "estimating frequencies from histograms"]
+  },
+  {
+    "id": "S10",
+    "label": "Time series",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["plotting time series", "identifying trends", "moving averages"]
+  },
+  {
+    "id": "S11",
+    "label": "Basic probability",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["probability scale", "theoretical probability", "experimental probability", "expected outcomes"]
+  },
+  {
+    "id": "S12",
+    "label": "Relative frequency",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["estimating probability from experiments", "comparing expected & actual results"]
+  },
+  {
+    "id": "S13",
+    "label": "Venn diagrams",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["two-set Venn diagrams", "three-set Venn diagrams (H)", "probability from Venn diagrams"]
+  },
+  {
+    "id": "S14",
+    "label": "Tree diagrams",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["independent events", "without replacement (H)", "reading probabilities from tree diagrams"]
+  },
+  {
+    "id": "S15",
+    "label": "Combined events & sample spaces",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["sample space diagrams", "two-way tables for probability", "addition rule for events"]
+  },
+  {
+    "id": "S16",
+    "label": "Conditional probability",
+    "strand": "Statistics & Probability",
+    "tier": "higher",
+    "subtopics": ["from two-way tables", "from tree diagrams", "from Venn diagrams"]
+  },
+  {
+    "id": "S17",
+    "label": "Mutually exclusive & independent events",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["addition rule", "multiplication rule", "identifying independence"]
+  },
+  {
+    "id": "S18",
+    "label": "Frequency trees",
+    "strand": "Statistics & Probability",
+    "tier": "both",
+    "subtopics": ["constructing frequency trees", "reading values from frequency trees"]
+  }
 ]

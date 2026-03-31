@@ -9,7 +9,7 @@ import {
   type TemplateQuestion,
 } from "./template-actions";
 
-type TopicEntry = { label: string; strand: string };
+type TopicEntry = { id: string; label: string; strand: string; tier: string; subtopics: string[] };
 const TOPICS: TopicEntry[] = topicsData;
 
 type QRow = { id: string; max_marks: number; topic: string };
