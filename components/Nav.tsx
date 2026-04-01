@@ -38,7 +38,7 @@ export default function Nav({ email, userName }: NavProps) {
         backdropFilter: "blur(12px)",
       }}
     >
-      <div className="max-w-2xl mx-auto px-4 h-[53px] flex items-center justify-between">
+      <div className="max-w-4xl mx-auto px-6 h-[53px] flex items-center justify-between">
         <a
           href="/dashboard"
           className="flex items-center gap-2 text-[15px] font-bold tracking-tight"

@@ -199,16 +199,16 @@ export default async function DashboardPage() {
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--bg)" }}>
       <Nav email={user.email ?? ""} userName={teacher?.full_name ?? undefined} />
 
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
-        <div className="flex items-center justify-between mb-6">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-10">
+        <div className="flex items-end justify-between mb-8">
           <div>
             <h1
-              className="text-xl font-bold tracking-tight"
+              className="text-2xl font-semibold tracking-tight"
               style={{ color: "var(--text-primary)" }}
             >
               {greeting}
             </h1>
-            <p className="text-[13px] mt-0.5" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
               Here&rsquo;s what Olvar has been working on.
             </p>
           </div>

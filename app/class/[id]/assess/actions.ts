@@ -52,3 +52,42 @@ export async function saveAssessmentWithMarks(
 
   return { assessmentId: assessment.id };
 }
+
+export async function deleteAssessment(
+  assessmentId: string,
+  classId: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { error: "Not authenticated" };
+
+  // Verify the assessment belongs to this teacher
+  const { data: assessment } = await supabase
+    .from("assessments")
+    .select("id, class_id, classes!inner(teacher_id)")
+    .eq("id", assessmentId)
+    .single();
+
+  if (!assessment || (assessment.classes as any).teacher_id !== user.id) {
+    return { error: "Assessment not found" };
+  }
+
+  // Delete related records first
+  await supabase.from("marks").delete().eq("assessment_id", assessmentId);
+  await supabase.from("analysis_results").delete().eq("assessment_id", assessmentId);
+  await supabase.from("parent_emails").delete().eq("assessment_id", assessmentId);
+
+  const { error } = await supabase
+    .from("assessments")
+    .delete()
+    .eq("id", assessmentId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/class/${classId}`);
+  return {};
+}

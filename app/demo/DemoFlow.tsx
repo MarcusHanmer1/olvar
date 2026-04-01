@@ -39,11 +39,11 @@ function cellColors(
   score: number,
   max: number
 ): { bg: string; border: string } {
-  if (score > max) return { bg: "#fef2f2", border: "#fca5a5" };
+  if (score > max) return { bg: "var(--rag-red-bg)", border: "#fca5a5" };
   const pct = score / max;
-  if (pct >= 0.7) return { bg: "#f0fdf4", border: "#e5e5e4" };
-  if (pct >= 0.4) return { bg: "#fffbeb", border: "#e5e5e4" };
-  return { bg: "#fef2f2", border: "#e5e5e4" };
+  if (pct >= 0.7) return { bg: "var(--rag-green-bg)", border: "var(--border)" };
+  if (pct >= 0.4) return { bg: "var(--rag-amber-bg)", border: "var(--border)" };
+  return { bg: "var(--rag-red-bg)", border: "var(--border)" };
 }
 
 function ragColor(pct: number): string {
@@ -116,7 +116,7 @@ export default function DemoFlow() {
     if (!el) return;
     if (total === null) {
       el.textContent = "—";
-      el.style.color = "#6b6b67";
+      el.style.color = "var(--text-secondary)";
       el.style.fontWeight = "400";
     } else {
       el.textContent = `${total}/${maxPossible}`;
@@ -134,7 +134,7 @@ export default function DemoFlow() {
     if (!el) return;
     if (col.length === 0) {
       el.textContent = "—";
-      el.style.color = "#6b6b67";
+      el.style.color = "var(--text-secondary)";
     } else {
       const avg = col.reduce((s, v) => s + v, 0) / col.length;
       el.textContent = avg.toFixed(1);
@@ -152,7 +152,7 @@ export default function DemoFlow() {
     if (el) {
       if (value === null) {
         el.style.backgroundColor = "";
-        el.style.borderColor = "#e5e5e4";
+        el.style.borderColor = "var(--border)";
       } else {
         const { bg, border } = cellColors(value, max);
         el.style.backgroundColor = bg;
@@ -264,13 +264,13 @@ export default function DemoFlow() {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ backgroundColor: "#fafaf9" }}
+      style={{ backgroundColor: "var(--bg)" }}
     >
       {/* Demo banner */}
       <div
         style={{
-          backgroundColor: "#f0fdfa",
-          borderBottom: "1px solid #ccfbf1",
+          backgroundColor: "var(--accent-light)",
+          borderBottom: "1px solid var(--summary-border)",
           padding: "8px 24px",
           display: "flex",
           alignItems: "center",
@@ -309,15 +309,15 @@ export default function DemoFlow() {
       {/* Nav */}
       <nav
         style={{
-          backgroundColor: "#ffffff",
-          borderBottom: "1px solid #e5e5e4",
+          backgroundColor: "var(--surface)",
+          borderBottom: "1px solid var(--border)",
         }}
       >
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link
             href="/"
             className="text-base font-semibold tracking-tight"
-            style={{ color: "#1c1c1a", textDecoration: "none" }}
+            style={{ color: "var(--text-primary)", textDecoration: "none" }}
           >
             Olvar
           </Link>
@@ -336,11 +336,11 @@ export default function DemoFlow() {
         <div className="mb-6">
           <h1
             className="text-2xl font-semibold tracking-tight mb-1"
-            style={{ color: "#1c1c1a" }}
+            style={{ color: "var(--text-primary)" }}
           >
             {step === "results" ? TITLE : "Try Olvar"}
           </h1>
-          <p className="text-sm" style={{ color: "#6b6b67" }}>
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
             {step === "results"
               ? `${DATE} · ${maxPossible} marks · ${DEMO_BOARD} ${DEMO_TIER}`
               : `${DEMO_CLASS} · ${STUDENTS.length} students · ${QUESTIONS.length} questions · ${maxPossible} marks`}
@@ -358,7 +358,7 @@ export default function DemoFlow() {
                   alignItems: "center",
                   gap: "6px",
                   fontSize: "13px",
-                  color: "#6b6b67",
+                  color: "var(--text-secondary)",
                   backgroundColor: "transparent",
                   border: "none",
                   cursor: "pointer",
@@ -393,15 +393,15 @@ export default function DemoFlow() {
           <div
             className="rounded-xl flex flex-col items-center justify-center py-24 text-center"
             style={{
-              backgroundColor: "#ffffff",
-              border: "1px solid #e5e5e4",
+              backgroundColor: "var(--surface)",
+              border: "1px solid var(--border)",
             }}
           >
             <div
               style={{
                 width: "40px",
                 height: "40px",
-                border: "3px solid #e5e5e4",
+                border: "3px solid var(--border)",
                 borderTopColor: "#0d9488",
                 borderRadius: "50%",
                 animation: "spin 0.8s linear infinite",
@@ -410,11 +410,11 @@ export default function DemoFlow() {
             />
             <p
               className="text-sm font-medium"
-              style={{ color: "#1c1c1a" }}
+              style={{ color: "var(--text-primary)" }}
             >
               {status || "Analysing…"}
             </p>
-            <p className="text-xs mt-1" style={{ color: "#6b6b67" }}>
+            <p className="text-xs mt-1" style={{ color: "var(--text-secondary)" }}>
               Claude is generating QLA, feedback, and interventions
             </p>
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -435,9 +435,9 @@ export default function DemoFlow() {
               }}
             >
               {[
-                { label: "≥70%", bg: "#f0fdf4", text: "#16a34a" },
-                { label: "40–69%", bg: "#fffbeb", text: "#d97706" },
-                { label: "<40%", bg: "#fef2f2", text: "#dc2626" },
+                { label: "≥70%", bg: "var(--rag-green-bg)", text: "#16a34a" },
+                { label: "40–69%", bg: "var(--rag-amber-bg)", text: "#d97706" },
+                { label: "<40%", bg: "var(--rag-red-bg)", text: "#dc2626" },
               ].map((l) => (
                 <span
                   key={l.label}
@@ -467,8 +467,8 @@ export default function DemoFlow() {
             <div
               style={{
                 borderRadius: "12px",
-                border: "1px solid #e5e5e4",
-                backgroundColor: "#ffffff",
+                border: "1px solid var(--border)",
+                backgroundColor: "var(--surface)",
                 overflowX: "auto",
               }}
             >
@@ -495,11 +495,11 @@ export default function DemoFlow() {
                     <th
                       style={{
                         padding: "6px 14px",
-                        borderBottom: "1px solid #f0f0ef",
-                        borderRight: "1px solid #e5e5e4",
+                        borderBottom: "1px solid var(--border)",
+                        borderRight: "1px solid var(--border)",
                         position: "sticky",
                         left: 0,
-                        backgroundColor: "#fafaf9",
+                        backgroundColor: "var(--surface-secondary)",
                         zIndex: 3,
                       }}
                     />
@@ -509,16 +509,16 @@ export default function DemoFlow() {
                         title={q.topic}
                         style={{
                           padding: "5px 2px",
-                          borderBottom: "1px solid #f0f0ef",
-                          borderRight: "1px solid #f0f0ef",
+                          borderBottom: "1px solid var(--border)",
+                          borderRight: "1px solid var(--border)",
                           textAlign: "center",
                           fontWeight: 400,
                           fontSize: "10px",
-                          color: "#6b6b67",
+                          color: "var(--text-secondary)",
                           overflow: "hidden",
                           whiteSpace: "nowrap",
                           textOverflow: "ellipsis",
-                          backgroundColor: "#fafaf9",
+                          backgroundColor: "var(--surface-secondary)",
                           maxWidth: `${CELL_W}px`,
                         }}
                       >
@@ -529,8 +529,8 @@ export default function DemoFlow() {
                     ))}
                     <th
                       style={{
-                        backgroundColor: "#fafaf9",
-                        borderBottom: "1px solid #f0f0ef",
+                        backgroundColor: "var(--surface-secondary)",
+                        borderBottom: "1px solid var(--border)",
                         position: "sticky",
                         right: 0,
                         zIndex: 3,
@@ -543,15 +543,15 @@ export default function DemoFlow() {
                     <th
                       style={{
                         padding: "7px 14px",
-                        borderBottom: "2px solid #e5e5e4",
-                        borderRight: "1px solid #e5e5e4",
+                        borderBottom: "2px solid var(--border-strong)",
+                        borderRight: "1px solid var(--border)",
                         textAlign: "left",
                         fontWeight: 500,
                         fontSize: "11px",
-                        color: "#6b6b67",
+                        color: "var(--text-secondary)",
                         position: "sticky",
                         left: 0,
-                        backgroundColor: "#fafaf9",
+                        backgroundColor: "var(--surface-secondary)",
                         zIndex: 3,
                       }}
                     >
@@ -562,10 +562,10 @@ export default function DemoFlow() {
                         key={q.id}
                         style={{
                           padding: "4px 2px",
-                          borderBottom: "2px solid #e5e5e4",
-                          borderRight: "1px solid #f0f0ef",
+                          borderBottom: "2px solid var(--border-strong)",
+                          borderRight: "1px solid var(--border)",
                           textAlign: "center",
-                          backgroundColor: "#fafaf9",
+                          backgroundColor: "var(--surface-secondary)",
                           lineHeight: 1.3,
                         }}
                       >
@@ -573,7 +573,7 @@ export default function DemoFlow() {
                           style={{
                             fontWeight: 700,
                             fontSize: "12px",
-                            color: "#1c1c1a",
+                            color: "var(--text-primary)",
                           }}
                         >
                           Q{q.number}
@@ -583,7 +583,7 @@ export default function DemoFlow() {
                           style={{
                             fontWeight: 400,
                             fontSize: "10px",
-                            color: "#6b6b67",
+                            color: "var(--text-secondary)",
                           }}
                         >
                           /{q.max_marks}
@@ -593,10 +593,10 @@ export default function DemoFlow() {
                     <th
                       style={{
                         padding: "4px 8px",
-                        borderBottom: "2px solid #e5e5e4",
-                        borderLeft: "1px solid #e5e5e4",
+                        borderBottom: "2px solid var(--border-strong)",
+                        borderLeft: "1px solid var(--border)",
                         textAlign: "center",
-                        backgroundColor: "#fafaf9",
+                        backgroundColor: "var(--surface-secondary)",
                         position: "sticky",
                         right: 0,
                         zIndex: 3,
@@ -607,7 +607,7 @@ export default function DemoFlow() {
                         style={{
                           fontWeight: 700,
                           fontSize: "12px",
-                          color: "#1c1c1a",
+                          color: "var(--text-primary)",
                         }}
                       >
                         Total
@@ -617,7 +617,7 @@ export default function DemoFlow() {
                         style={{
                           fontWeight: 400,
                           fontSize: "10px",
-                          color: "#6b6b67",
+                          color: "var(--text-secondary)",
                         }}
                       >
                         /{maxPossible}
@@ -632,15 +632,15 @@ export default function DemoFlow() {
                       <td
                         style={{
                           padding: "3px 14px",
-                          borderBottom: "1px solid #f0f0ef",
-                          borderRight: "1px solid #e5e5e4",
+                          borderBottom: "1px solid var(--border)",
+                          borderRight: "1px solid var(--border)",
                           fontWeight: 500,
                           fontSize: "13px",
-                          color: "#1c1c1a",
+                          color: "var(--text-primary)",
                           whiteSpace: "nowrap",
                           position: "sticky",
                           left: 0,
-                          backgroundColor: "#ffffff",
+                          backgroundColor: "var(--surface)",
                           zIndex: 1,
                         }}
                       >
@@ -652,8 +652,8 @@ export default function DemoFlow() {
                           key={q.id}
                           style={{
                             padding: "2px",
-                            borderBottom: "1px solid #f0f0ef",
-                            borderRight: "1px solid #f0f0ef",
+                            borderBottom: "1px solid var(--border)",
+                            borderRight: "1px solid var(--border)",
                           }}
                         >
                           <input
@@ -675,14 +675,14 @@ export default function DemoFlow() {
                               width: "100%",
                               height: "34px",
                               textAlign: "center",
-                              border: "1px solid #e5e5e4",
+                              border: "1px solid var(--border)",
                               borderRadius: "4px",
                               outline: "none",
                               fontFamily: "inherit",
                               fontSize: "13px",
                               fontVariantNumeric: "tabular-nums",
                               backgroundColor: "transparent",
-                              color: "#1c1c1a",
+                              color: "var(--text-primary)",
                             }}
                           />
                         </td>
@@ -691,14 +691,14 @@ export default function DemoFlow() {
                       <td
                         style={{
                           padding: "3px 10px",
-                          borderBottom: "1px solid #f0f0ef",
-                          borderLeft: "1px solid #e5e5e4",
+                          borderBottom: "1px solid var(--border)",
+                          borderLeft: "1px solid var(--border)",
                           textAlign: "center",
                           fontSize: "12px",
                           fontVariantNumeric: "tabular-nums",
                           position: "sticky",
                           right: 0,
-                          backgroundColor: "#fafaf9",
+                          backgroundColor: "var(--surface-secondary)",
                           zIndex: 1,
                         }}
                       >
@@ -706,7 +706,7 @@ export default function DemoFlow() {
                           ref={(el) => {
                             totalSpans.current[si] = el;
                           }}
-                          style={{ color: "#6b6b67" }}
+                          style={{ color: "var(--text-secondary)" }}
                         >
                           —
                         </span>
@@ -719,14 +719,14 @@ export default function DemoFlow() {
                     <td
                       style={{
                         padding: "7px 14px",
-                        borderTop: "2px solid #e5e5e4",
-                        borderRight: "1px solid #e5e5e4",
+                        borderTop: "2px solid var(--border-strong)",
+                        borderRight: "1px solid var(--border)",
                         fontWeight: 600,
                         fontSize: "11px",
-                        color: "#6b6b67",
+                        color: "var(--text-secondary)",
                         position: "sticky",
                         left: 0,
-                        backgroundColor: "#fafaf9",
+                        backgroundColor: "var(--surface-secondary)",
                         zIndex: 1,
                       }}
                     >
@@ -737,10 +737,10 @@ export default function DemoFlow() {
                         key={q.id}
                         style={{
                           padding: "7px 2px",
-                          borderTop: "2px solid #e5e5e4",
-                          borderRight: "1px solid #f0f0ef",
+                          borderTop: "2px solid var(--border-strong)",
+                          borderRight: "1px solid var(--border)",
                           textAlign: "center",
-                          backgroundColor: "#fafaf9",
+                          backgroundColor: "var(--surface-secondary)",
                           fontSize: "12px",
                           fontVariantNumeric: "tabular-nums",
                         }}
@@ -749,7 +749,7 @@ export default function DemoFlow() {
                           ref={(el) => {
                             avgSpans.current[qi] = el;
                           }}
-                          style={{ color: "#6b6b67" }}
+                          style={{ color: "var(--text-secondary)" }}
                         >
                           —
                         </span>
@@ -757,9 +757,9 @@ export default function DemoFlow() {
                     ))}
                     <td
                       style={{
-                        borderTop: "2px solid #e5e5e4",
-                        borderLeft: "1px solid #e5e5e4",
-                        backgroundColor: "#fafaf9",
+                        borderTop: "2px solid var(--border-strong)",
+                        borderLeft: "1px solid var(--border)",
+                        backgroundColor: "var(--surface-secondary)",
                         position: "sticky",
                         right: 0,
                         zIndex: 1,
@@ -779,7 +779,7 @@ export default function DemoFlow() {
                   borderRadius: "8px",
                   fontSize: "13px",
                   color: "#dc2626",
-                  backgroundColor: "#fef2f2",
+                  backgroundColor: "var(--rag-red-bg)",
                   border: "1px solid #fecaca",
                 }}
               >
@@ -797,6 +797,7 @@ export default function DemoFlow() {
             >
               <button
                 onClick={handleAnalyse}
+                className="btn-primary"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -811,14 +812,6 @@ export default function DemoFlow() {
                   cursor: "pointer",
                   letterSpacing: "-0.01em",
                 }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.backgroundColor =
-                    "#0f766e")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.backgroundColor =
-                    "#0d9488")
-                }
               >
                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
                   <path
