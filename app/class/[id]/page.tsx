@@ -52,7 +52,7 @@ export default async function ClassPage({
   }[];
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#fafaf9" }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--bg)" }}>
       <Nav email={user.email ?? ""} />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-10">
@@ -60,7 +60,7 @@ export default async function ClassPage({
         <Link
           href="/dashboard"
           className="inline-flex items-center gap-1.5 text-sm mb-6"
-          style={{ color: "#6b6b67", textDecoration: "none" }}
+          style={{ color: "var(--text-secondary)", textDecoration: "none" }}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path
@@ -79,7 +79,7 @@ export default async function ClassPage({
           <div>
             <h1
               className="text-2xl font-semibold tracking-tight mb-2"
-              style={{ color: "#1c1c1a" }}
+              style={{ color: "var(--text-primary)" }}
             >
               {cls.name}
             </h1>
@@ -88,7 +88,7 @@ export default async function ClassPage({
                 <span
                   key={tag}
                   className="text-xs px-2 py-0.5 rounded-md"
-                  style={{ backgroundColor: "#f4f4f3", color: "#6b6b67" }}
+                  style={{ backgroundColor: "var(--surface-secondary)", color: "var(--text-secondary)" }}
                 >
                   {tag}
                 </span>
@@ -97,7 +97,7 @@ export default async function ClassPage({
           </div>
           <Link
             href={`/class/${id}/assess`}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium"
+            className="btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold"
             style={{ backgroundColor: "#0d9488", color: "#ffffff", textDecoration: "none" }}
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -115,13 +115,13 @@ export default async function ClassPage({
           <div className="mt-8">
             <h2
               className="text-sm font-semibold mb-3"
-              style={{ color: "#1c1c1a" }}
+              style={{ color: "var(--text-primary)" }}
             >
               Assessments
             </h2>
             <div
               className="rounded-xl overflow-hidden"
-              style={{ backgroundColor: "#ffffff", border: "1px solid #e5e5e4" }}
+              style={{ backgroundColor: "var(--surface)", border: "1px solid var(--border)" }}
             >
               {assessmentRows.map((a, i) => {
                 // Compute class average percentage
@@ -152,7 +152,7 @@ export default async function ClassPage({
                       textDecoration: "none",
                       borderBottom:
                         i < assessmentRows.length - 1
-                          ? "1px solid #f0f0ef"
+                          ? "1px solid var(--border)"
                           : undefined,
                       display: "flex",
                     }}
@@ -160,13 +160,13 @@ export default async function ClassPage({
                     <div className="flex items-center gap-3 min-w-0">
                       <span
                         className="text-sm font-medium truncate"
-                        style={{ color: "#1c1c1a" }}
+                        style={{ color: "var(--text-primary)" }}
                       >
                         {a.title}
                       </span>
                       <span
                         className="text-xs flex-shrink-0"
-                        style={{ color: "#6b6b67" }}
+                        style={{ color: "var(--text-secondary)" }}
                       >
                         {a.date}
                       </span>

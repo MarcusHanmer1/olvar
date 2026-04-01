@@ -40,7 +40,12 @@ export default function AddClassModal() {
     setError(null);
     setLoading(true);
 
-    const result = await createClass({ name, year_group: yearGroup, exam_board: examBoard, tier });
+    const result = await createClass({
+      name,
+      year_group: yearGroup,
+      exam_board: examBoard,
+      tier,
+    });
 
     setLoading(false);
     if (result.error) {
@@ -55,22 +60,11 @@ export default function AddClassModal() {
     <>
       <button
         onClick={openModal}
-        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium"
+        className="btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-bold"
         style={{ backgroundColor: "#0d9488", color: "#ffffff" }}
-        onMouseEnter={(e) =>
-          ((e.currentTarget as HTMLElement).style.backgroundColor = "#0f766e")
-        }
-        onMouseLeave={(e) =>
-          ((e.currentTarget as HTMLElement).style.backgroundColor = "#0d9488")
-        }
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path
-            d="M7 1v12M1 7h12"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
+          <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
         Add class
       </button>
@@ -78,51 +72,32 @@ export default function AddClassModal() {
       {open && (
         <div className="modal-backdrop" onClick={closeModal}>
           <div
-            className="w-full max-w-md rounded-xl p-6"
+            className="w-full max-w-md rounded-2xl p-6"
             style={{
-              backgroundColor: "#ffffff",
-              border: "1px solid #e5e5e4",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+              backgroundColor: "var(--surface)",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow-md)",
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-5">
-              <h2
-                className="text-base font-semibold"
-                style={{ color: "#1c1c1a" }}
-              >
+              <h2 className="text-[17px] font-extrabold" style={{ color: "var(--text-primary)" }}>
                 New class
               </h2>
               <button
                 onClick={closeModal}
-                className="w-7 h-7 flex items-center justify-center rounded-md transition-colors"
-                style={{ color: "#6b6b67" }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.backgroundColor = "#f4f4f3")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.backgroundColor = "transparent")
-                }
+                className="btn-ghost w-8 h-8 flex items-center justify-center"
+                style={{ color: "var(--text-secondary)" }}
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M1 1l12 12M13 1L1 13"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
+                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {/* Name */}
               <div className="flex flex-col gap-1.5">
-                <label
-                  htmlFor="class-name"
-                  className="text-xs font-medium"
-                  style={{ color: "#1c1c1a" }}
-                >
+                <label htmlFor="class-name" className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>
                   Class name
                 </label>
                 <input
@@ -132,85 +107,76 @@ export default function AddClassModal() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. 11A/Ma1 – Top Set"
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1px solid #e5e5e4", color: "#1c1c1a" }}
-                  onFocus={(e) => (e.target.style.borderColor = "#0d9488")}
-                  onBlur={(e) => (e.target.style.borderColor = "#e5e5e4")}
+                  className="w-full rounded-xl px-3 py-2.5 text-[15px] outline-none transition-colors"
+                  style={{
+                    border: "1px solid var(--border)",
+                    color: "var(--text-primary)",
+                    backgroundColor: "var(--surface)",
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = "#0d9488";
+                    e.target.style.boxShadow = "0 0 0 3px rgba(13, 148, 136, 0.1)";
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = "var(--border)";
+                    e.target.style.boxShadow = "none";
+                  }}
                 />
               </div>
 
-              {/* Year group + Exam board */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label
-                    htmlFor="year-group"
-                    className="text-xs font-medium"
-                    style={{ color: "#1c1c1a" }}
-                  >
+                  <label htmlFor="year-group" className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>
                     Year group
                   </label>
                   <select
                     id="year-group"
                     value={yearGroup}
                     onChange={(e) => setYearGroup(parseInt(e.target.value))}
-                    className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                    style={{ border: "1px solid #e5e5e4", color: "#1c1c1a", backgroundColor: "#ffffff" }}
-                    onFocus={(e) => (e.target.style.borderColor = "#0d9488")}
-                    onBlur={(e) => (e.target.style.borderColor = "#e5e5e4")}
+                    className="w-full rounded-xl px-3 py-2.5 text-[15px] outline-none transition-colors"
+                    style={{ border: "1px solid var(--border)", color: "var(--text-primary)", backgroundColor: "var(--surface)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#0d9488"; e.target.style.boxShadow = "0 0 0 3px rgba(13, 148, 136, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
                   >
                     {YEAR_GROUPS.map((y) => (
-                      <option key={y} value={y}>
-                        Year {y}
-                      </option>
+                      <option key={y} value={y}>Year {y}</option>
                     ))}
                   </select>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label
-                    htmlFor="exam-board"
-                    className="text-xs font-medium"
-                    style={{ color: "#1c1c1a" }}
-                  >
+                  <label htmlFor="exam-board" className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>
                     Exam board
                   </label>
                   <select
                     id="exam-board"
                     value={examBoard}
                     onChange={(e) => setExamBoard(e.target.value)}
-                    className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                    style={{ border: "1px solid #e5e5e4", color: "#1c1c1a", backgroundColor: "#ffffff" }}
-                    onFocus={(e) => (e.target.style.borderColor = "#0d9488")}
-                    onBlur={(e) => (e.target.style.borderColor = "#e5e5e4")}
+                    className="w-full rounded-xl px-3 py-2.5 text-[15px] outline-none transition-colors"
+                    style={{ border: "1px solid var(--border)", color: "var(--text-primary)", backgroundColor: "var(--surface)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#0d9488"; e.target.style.boxShadow = "0 0 0 3px rgba(13, 148, 136, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
                   >
                     {EXAM_BOARDS.map((b) => (
-                      <option key={b} value={b}>
-                        {b}
-                      </option>
+                      <option key={b} value={b}>{b}</option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              {/* Tier */}
               <div className="flex flex-col gap-1.5">
-                <span
-                  className="text-xs font-medium"
-                  style={{ color: "#1c1c1a" }}
-                >
-                  Tier
-                </span>
-                <div className="flex rounded-lg overflow-hidden" style={{ border: "1px solid #e5e5e4" }}>
+                <span className="text-[13px] font-bold" style={{ color: "var(--text-primary)" }}>Tier</span>
+                <div className="flex rounded-full overflow-hidden" style={{ border: "1px solid var(--border)" }}>
                   {(["Higher", "Foundation"] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setTier(t)}
-                      className="flex-1 py-2 text-sm font-medium transition-colors"
+                      className="flex-1 py-2.5 text-[13px] font-bold transition-colors"
                       style={{
-                        backgroundColor: tier === t ? "#0d9488" : "#ffffff",
-                        color: tier === t ? "#ffffff" : "#6b6b67",
-                        borderRight: t === "Higher" ? "1px solid #e5e5e4" : undefined,
+                        backgroundColor: tier === t ? "#0d9488" : "var(--surface)",
+                        color: tier === t ? "#ffffff" : "var(--text-secondary)",
+                        borderRight: t === "Higher" ? "1px solid var(--border)" : undefined,
                       }}
                     >
                       {t}
@@ -221,12 +187,8 @@ export default function AddClassModal() {
 
               {error && (
                 <p
-                  className="text-xs rounded-lg px-3 py-2"
-                  style={{
-                    color: "#dc2626",
-                    backgroundColor: "#fef2f2",
-                    border: "1px solid #fecaca",
-                  }}
+                  className="text-[13px] rounded-xl px-3 py-2.5"
+                  style={{ color: "#dc2626", backgroundColor: "var(--rag-red-bg)", border: "1px solid #fecaca" }}
                 >
                   {error}
                 </p>
@@ -236,24 +198,16 @@ export default function AddClassModal() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 rounded-lg text-sm font-medium"
-                  style={{
-                    border: "1px solid #e5e5e4",
-                    color: "#6b6b67",
-                    backgroundColor: "#ffffff",
-                  }}
+                  className="btn-secondary px-5 py-2.5 rounded-full text-[13px] font-bold"
+                  style={{ border: "1px solid var(--border)", color: "var(--text-secondary)", backgroundColor: "var(--surface)" }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity"
-                  style={{
-                    backgroundColor: "#0d9488",
-                    color: "#ffffff",
-                    opacity: loading ? 0.6 : 1,
-                  }}
+                  className="btn-primary px-5 py-2.5 rounded-full text-[13px] font-bold transition-opacity"
+                  style={{ backgroundColor: "#0d9488", color: "#ffffff", opacity: loading ? 0.6 : 1 }}
                 >
                   {loading ? "Creating…" : "Create class"}
                 </button>
