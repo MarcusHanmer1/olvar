@@ -104,7 +104,19 @@ function pctColor(pct: number): string {
 
 /* ── Main Briefing Component ── */
 
-export default function Briefing({ classes }: { classes: ClassBriefing[] }) {
+export type Insight = {
+  icon: "alert" | "trend-up" | "trend-down" | "star" | "target";
+  text: string;
+  classId?: string;
+};
+
+export default function Briefing({
+  classes,
+  insights = [],
+}: {
+  classes: ClassBriefing[];
+  insights?: Insight[];
+}) {
   const totalStudents = classes.reduce((s, c) => s + c.student_count, 0);
   const totalBelowTarget = classes.reduce((s, c) => s + c.students_below_target, 0);
   const improvingCount = classes.filter(
@@ -130,6 +142,66 @@ export default function Briefing({ classes }: { classes: ClassBriefing[] }) {
             value={totalBelowTarget}
             color={totalBelowTarget > 0 ? "#dc2626" : undefined}
           />
+        </div>
+      )}
+
+      {/* AI Insights */}
+      {insights.length > 0 && (
+        <div
+          style={{
+            borderRadius: "16px",
+            border: "1px solid var(--summary-border)",
+            background: "var(--summary-bg)",
+            overflow: "hidden",
+            marginBottom: "24px",
+          }}
+        >
+          <div
+            style={{
+              padding: "12px 16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              borderBottom: "1px solid var(--summary-border)",
+            }}
+          >
+            <div
+              style={{
+                width: "24px",
+                height: "24px",
+                borderRadius: "6px",
+                backgroundColor: "#0d9488",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 1.5L9.4 4.5L12.5 4.8L10.1 7L10.7 10.2L8 8.7L5.3 10.2L5.9 7L3.5 4.8L6.6 4.5L8 1.5Z"
+                  stroke="#ffffff"
+                  strokeWidth="1.2"
+                  strokeLinejoin="round"
+                  fill="rgba(255,255,255,0.25)"
+                />
+              </svg>
+            </div>
+            <span
+              style={{
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "var(--text-primary)",
+              }}
+            >
+              Olvar&apos;s insights
+            </span>
+          </div>
+          <div>
+            {insights.map((insight, i) => (
+              <InsightRow key={i} insight={insight} isLast={i === insights.length - 1} />
+            ))}
+          </div>
         </div>
       )}
 
@@ -381,4 +453,96 @@ function ClassCard({ cls }: { cls: ClassBriefing }) {
       )}
     </Link>
   );
+}
+
+/* ── Insight Row ── */
+
+const insightIcons: Record<Insight["icon"], { color: string; bg: string; svg: string }> = {
+  alert: {
+    color: "#dc2626",
+    bg: "var(--rag-red-bg)",
+    svg: '<path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.5 3h1v5h-1V4zm0 7h1v1h-1v-1z" fill="currentColor"/>',
+  },
+  "trend-up": {
+    color: "#16a34a",
+    bg: "var(--rag-green-bg)",
+    svg: '<path d="M8 12V4M4 7l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+  },
+  "trend-down": {
+    color: "#dc2626",
+    bg: "var(--rag-red-bg)",
+    svg: '<path d="M8 4v8M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+  },
+  star: {
+    color: "#0d9488",
+    bg: "var(--accent-light)",
+    svg: '<path d="M8 2L9.4 5.5L13 5.8L10.2 8.2L11 12L8 10.2L5 12L5.8 8.2L3 5.8L6.6 5.5L8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/>',
+  },
+  target: {
+    color: "#d97706",
+    bg: "var(--rag-amber-bg)",
+    svg: '<circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="8" cy="8" r="1" fill="currentColor"/>',
+  },
+};
+
+function InsightRow({ insight, isLast }: { insight: Insight; isLast: boolean }) {
+  const icon = insightIcons[insight.icon];
+  const content = (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        gap: "10px",
+        padding: "10px 16px",
+        borderBottom: isLast ? undefined : "1px solid var(--summary-border)",
+        textDecoration: "none",
+      }}
+    >
+      <div
+        style={{
+          width: "22px",
+          height: "22px",
+          borderRadius: "6px",
+          backgroundColor: icon.bg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          color: icon.color,
+          marginTop: "1px",
+        }}
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          dangerouslySetInnerHTML={{ __html: icon.svg }}
+        />
+      </div>
+      <span
+        style={{
+          fontSize: "13px",
+          lineHeight: 1.5,
+          color: "var(--text-primary)",
+        }}
+      >
+        {insight.text}
+      </span>
+    </div>
+  );
+
+  if (insight.classId) {
+    return (
+      <Link
+        href={`/class/${insight.classId}`}
+        style={{ display: "block", textDecoration: "none", transition: "background-color 0.1s" }}
+        className="briefing-card"
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }

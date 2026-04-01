@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Nav from "@/components/Nav";
 import AddClassModal from "./AddClassModal";
-import Briefing, { type ClassBriefing, type TrendPoint } from "./Briefing";
+import Briefing, { type ClassBriefing, type TrendPoint, type Insight } from "./Briefing";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -192,6 +192,107 @@ export default async function DashboardPage() {
     };
   });
 
+  /* ── Compute cross-class AI insights ── */
+  const insights: Insight[] = [];
+
+  // Collect all weak topics across classes with their class names
+  const allWeakTopics: { topic: string; className: string; classId: string; pct: number }[] = [];
+  for (const b of briefings) {
+    if (b.last_assessment) {
+      const assessments = assessmentMap[b.id] ?? [];
+      const lastA = assessments[assessments.length - 1];
+      if (lastA && analysisMap[lastA.id]) {
+        const qla = analysisMap[lastA.id].qla_data;
+        if (Array.isArray(qla)) {
+          for (const t of qla) {
+            if (t.avg_percentage < 50) {
+              allWeakTopics.push({ topic: t.topic, className: b.name, classId: b.id, pct: t.avg_percentage });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Find topics that are weak across multiple classes
+  const topicClassCount = new Map<string, string[]>();
+  for (const wt of allWeakTopics) {
+    const existing = topicClassCount.get(wt.topic) ?? [];
+    if (!existing.includes(wt.className)) {
+      existing.push(wt.className);
+      topicClassCount.set(wt.topic, existing);
+    }
+  }
+  for (const [topic, classNames] of topicClassCount) {
+    if (classNames.length >= 2) {
+      insights.push({
+        icon: "alert",
+        text: `${topic} is a weak spot across ${classNames.length} classes (${classNames.join(", ")}). Consider a department-wide intervention or shared resources.`,
+      });
+    }
+  }
+
+  // Classes with biggest improvement
+  for (const b of briefings) {
+    if (b.trend.length >= 2) {
+      const last = b.trend[b.trend.length - 1].avg_pct;
+      const prev = b.trend[b.trend.length - 2].avg_pct;
+      const change = last - prev;
+      if (change >= 10) {
+        insights.push({
+          icon: "trend-up",
+          text: `${b.name} improved by ${Math.round(change)} percentage points since their last assessment — great progress.`,
+          classId: b.id,
+        });
+      } else if (change <= -10) {
+        insights.push({
+          icon: "trend-down",
+          text: `${b.name} dropped ${Math.round(Math.abs(change))} percentage points. Review the latest results to identify what went wrong.`,
+          classId: b.id,
+        });
+      }
+    }
+  }
+
+  // Classes with high below-target count
+  for (const b of briefings) {
+    if (b.students_below_target > 0 && b.student_count > 0) {
+      const ratio = b.students_below_target / b.student_count;
+      if (ratio >= 0.5) {
+        insights.push({
+          icon: "target",
+          text: `${b.students_below_target} of ${b.student_count} students in ${b.name} are below their target grade. Intervention is needed before the next assessment.`,
+          classId: b.id,
+        });
+      }
+    }
+  }
+
+  // Classes performing well
+  for (const b of briefings) {
+    if (b.last_assessment && b.last_assessment.avg_pct >= 80 && b.weak_topics.length === 0) {
+      insights.push({
+        icon: "star",
+        text: `${b.name} is performing strongly with an ${Math.round(b.last_assessment.avg_pct)}% class average and no weak topics. Consider stretch content or exam-style timed practice.`,
+        classId: b.id,
+      });
+    }
+  }
+
+  // Unassessed classes with students
+  for (const b of briefings) {
+    if (!b.last_assessment && b.student_count > 0) {
+      insights.push({
+        icon: "target",
+        text: `${b.name} has ${b.student_count} students but no assessments yet. Run one to unlock Olvar's analysis.`,
+        classId: b.id,
+      });
+    }
+  }
+
+  // Limit to top 5 most important insights
+  const topInsights = insights.slice(0, 5);
+
   const firstName = teacher?.full_name?.split(" ")[0] ?? "";
   const greeting = getGreeting(firstName);
 
@@ -215,7 +316,7 @@ export default async function DashboardPage() {
           <AddClassModal />
         </div>
 
-        <Briefing classes={briefings} />
+        <Briefing classes={briefings} insights={topInsights} />
       </main>
     </div>
   );

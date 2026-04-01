@@ -164,3 +164,32 @@ Rules:
 
   return Response.json({ ...parsed, id: saved.id, created_at: saved.created_at });
 }
+
+export async function DELETE(request: Request) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return Response.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+  if (!id) {
+    return Response.json({ error: "id is required" }, { status: 400 });
+  }
+
+  // RLS ensures only the owning teacher can delete
+  const { error } = await supabase
+    .from("generated_questions")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+
+  return Response.json({ success: true });
+}
