@@ -50,7 +50,8 @@ interface Props {
   examBoard: string;
   tier: string;
   yearGroup: number;
-  history: HistoryEntry[];
+  history?: HistoryEntry[];
+  apiEndpoint?: string;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -162,7 +163,8 @@ export default function PracticeQuestions({
   examBoard,
   tier,
   yearGroup,
-  history: initialHistory,
+  history: initialHistory = [],
+  apiEndpoint = "/api/v1/generate-questions",
 }: Props) {
   // Sort QLA by weakest first
   const sorted = [...qla].sort((a, b) => a.avg_percentage - b.avg_percentage);
@@ -209,7 +211,7 @@ export default function PracticeQuestions({
     setError(null);
 
     try {
-      const res = await fetch("/api/v1/generate-questions", {
+      const res = await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

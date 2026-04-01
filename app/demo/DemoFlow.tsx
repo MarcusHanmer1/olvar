@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import ResultsView from "@/app/class/[id]/results/[assessmentId]/ResultsView";
+import PracticeQuestions from "@/app/class/[id]/results/[assessmentId]/PracticeQuestions";
 
 // ─── Demo data ────────────────────────────────────────────────────────────────
 
@@ -385,6 +386,29 @@ export default function DemoFlow() {
               feedback={results.feedback}
               interventions={results.interventions}
             />
+
+            {/* Practice Questions */}
+            <div style={{ marginTop: "32px" }}>
+              <h2
+                style={{
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  color: "var(--text-primary)",
+                  marginBottom: "10px",
+                }}
+              >
+                Practice Questions
+              </h2>
+              <PracticeQuestions
+                qla={results.qla}
+                classId="demo"
+                className={DEMO_CLASS}
+                examBoard={DEMO_BOARD}
+                tier={DEMO_TIER}
+                yearGroup={11}
+                apiEndpoint="/api/demo-generate-questions"
+              />
+            </div>
           </div>
         )}
 
