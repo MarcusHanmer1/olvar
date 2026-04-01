@@ -69,6 +69,14 @@ CREATE TABLE assessment_templates (
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE generated_questions (
+  id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  class_id        UUID REFERENCES classes(id) ON DELETE CASCADE NOT NULL,
+  topics          JSONB NOT NULL DEFAULT '[]',
+  questions_data  JSONB NOT NULL DEFAULT '{}',
+  created_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ------------------------------------------------------------
 -- Row Level Security
 -- ------------------------------------------------------------
@@ -80,6 +88,7 @@ ALTER TABLE assessments      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE marks            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analysis_results      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE assessment_templates  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE generated_questions   ENABLE ROW LEVEL SECURITY;
 
 -- teachers: own row only
 CREATE POLICY "teachers_select" ON teachers FOR SELECT USING (auth.uid() = id);
@@ -134,6 +143,16 @@ CREATE POLICY "analysis_results_all" ON analysis_results FOR ALL
 -- assessment_templates: teacher owns them
 CREATE POLICY "templates_all" ON assessment_templates FOR ALL
   USING (auth.uid() = teacher_id);
+
+-- generated_questions: via class ownership
+CREATE POLICY "generated_questions_all" ON generated_questions FOR ALL
+  USING (
+    EXISTS (
+      SELECT 1 FROM classes
+      WHERE classes.id = generated_questions.class_id
+        AND classes.teacher_id = auth.uid()
+    )
+  );
 
 -- ------------------------------------------------------------
 -- Trigger: create teachers row when a new user signs up

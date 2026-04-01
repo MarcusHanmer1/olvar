@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import Nav from "@/components/Nav";
 import ResultsView from "./ResultsView";
+import PracticeQuestions from "./PracticeQuestions";
 
 export type TopicComparison = {
   topic: string;
@@ -80,6 +81,25 @@ export default async function ResultsPage({
     target_grade: number;
     current_percentage: number;
     weakest_topics: string[];
+  }[];
+
+  /* ── Fetch previously generated question sets for this class ── */
+  const { data: generatedHistory } = await supabase
+    .from("generated_questions")
+    .select("id, topics, questions_data, created_at")
+    .eq("class_id", id)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  const practiceHistory = (generatedHistory ?? []) as {
+    id: string;
+    topics: string[];
+    questions_data: {
+      questions: { number: number; question: string; marks: number; topic: string }[];
+      mark_scheme: { number: number; marks_breakdown: string; answer: string; common_misconceptions: string }[];
+      total_marks: number;
+    };
+    created_at: string;
   }[];
 
   /* ── Comparison: find previous assessment for same class ── */
@@ -259,6 +279,29 @@ export default async function ResultsPage({
           interventions={interventions}
           comparison={comparison}
         />
+
+        {/* Practice Questions — placed after QLA in the results flow */}
+        <div style={{ marginTop: "32px" }}>
+          <h2
+            style={{
+              fontSize: "15px",
+              fontWeight: 700,
+              color: "var(--text-primary)",
+              marginBottom: "10px",
+            }}
+          >
+            Practice Questions
+          </h2>
+          <PracticeQuestions
+            qla={qlaData.qla}
+            classId={id}
+            className={cls.name}
+            examBoard={cls.exam_board}
+            tier={cls.tier}
+            yearGroup={cls.year_group}
+            history={practiceHistory}
+          />
+        </div>
       </main>
     </div>
   );
